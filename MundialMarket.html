@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MundialMarket – Coleccionables de Mundiales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1628;
+    --bg2: #1E3A5F;
+    --bg3: #0F2240;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --ivory: #E8E0CC;
+    --ivory-muted: #A09880;
+    --red: #8B1A1A;
+    --red-light: #C23C3C;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ivory);
+    min-height: 100vh;
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--gold);
+    overflow: hidden;
+    padding: 6px 0;
+    position: relative;
+  }
+  .ticker-inner {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 15px;
+    letter-spacing: 4px;
+    color: var(--bg);
+  }
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+  }
+  .logo span { color: var(--ivory); }
+  nav { display: flex; gap: 0.5rem; }
+  .nav-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ivory-muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-year-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18vw;
+    color: rgba(201,168,76,0.04);
+    pointer-events: none;
+    letter-spacing: 10px;
+    user-select: none;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: 4px;
+    color: var(--ivory);
+    line-height: 1;
+    position: relative;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    margin-top: 1rem;
+    color: var(--ivory-muted);
+    font-size: 1rem;
+    max-width: 540px;
+    margin-inline: auto;
+    position: relative;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    position: relative;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-ghost {
+    background: none;
+    color: var(--ivory);
+    border: 1px solid var(--border-strong);
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── STATS ── */
+  .stats-bar {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat {
+    flex: 1;
+    padding: 1.2rem;
+    background: var(--bg3);
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--ivory-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-label {
+    font-size: 12px;
+    color: var(--ivory-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: 0.5rem;
+  }
+  .filter-chip {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ivory-muted);
+    padding: 5px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .filter-chip:hover, .filter-chip.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+  .search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .search-bar input {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--ivory);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-bar input::placeholder { color: var(--ivory-muted); }
+  .search-bar input:focus { border-color: var(--gold); }
+  .btn-search {
+    background: var(--gold);
+    border: none;
+    color: var(--bg);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-search:hover { background: var(--gold-light); }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+  }
+  .card-img {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 5rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--bg2));
+  }
+  .card-body { padding: 1rem; }
+  .card-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .tag-year { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .tag-cat { background: rgba(139,26,26,0.2); color: #E07070; }
+  .tag-cond { background: rgba(255,255,255,0.06); color: var(--ivory-muted); }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: var(--ivory-muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-price {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .card-key {
+    font-size: 10px;
+    color: var(--ivory-muted);
+    font-family: 'Inter', monospace;
+    background: rgba(255,255,255,0.05);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .btn-contact {
+    background: none;
+    border: 1px solid var(--border-strong);
+    color: var(--gold);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-contact:hover { background: rgba(201,168,76,0.1); }
+
+  /* ── PANEL PUBLICAR ── */
+  .panel {
+    display: none;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .panel.open { display: block; }
+  .panel h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ivory-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .field input, .field select, .field textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--ivory);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--gold);
+  }
+  .field select option { background: var(--bg2); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field input::placeholder { color: var(--ivory-muted); }
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 480px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+  }
+  .modal h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--ivory-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--ivory); }
+  .record-table { width: 100%; border-collapse: collapse; }
+  .record-table tr:not(:last-child) td {
+    border-bottom: 1px solid var(--border);
+  }
+  .record-table td {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+  .record-table td:first-child {
+    color: var(--ivory-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 140px;
+  }
+  .record-table td:last-child { color: var(--ivory); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 4rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+  footer p {
+    font-size: 12px;
+    color: var(--ivory-muted);
+    opacity: 0.6;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    color: var(--ivory);
+    margin-bottom: 0.3rem;
+  }
+  .section-title span { color: var(--gold); }
+  .section-sub {
+    font-size: 13px;
+    color: var(--ivory-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ivory-muted);
+    font-size: 14px;
+  }
+  .empty-state .big { font-family: 'Bebas Neue', cursive; font-size: 3rem; color: var(--border-strong); margin-bottom: 0.5rem; }
+
+  /* responsive nav */
+  @media (max-width: 600px) {
+    header { flex-direction: column; gap: 1rem; }
+    .stats-bar { flex-wrap: wrap; }
+    .stat { min-width: 50%; }
+    .hero { padding: 2rem 1rem; }
+    main { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-text"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Mundial<span>Market</span></div>
+  <nav>
+    <button class="nav-btn active" onclick="setView('explorar', this)">Explorar</button>
+    <button class="nav-btn" onclick="setView('publicar', this)">Publicar</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero" id="hero-section">
+  <div class="hero-year-bg" id="hero-year">2026</div>
+  <h1>El mercado de los <span>coleccionables</span> del mundo</h1>
+  <p>Comprá, vendé e intercambiá piezas únicas de todos los mundiales de fútbol. Desde figuritas a camisetas originales.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="setView('explorar', document.querySelector('.nav-btn'))">Ver coleccionables</button>
+    <button class="btn-ghost" onclick="setView('publicar', document.querySelectorAll('.nav-btn')[1])">Publicar pieza</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num" id="stat-items">248</div>
+    <div class="stat-label">Piezas activas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-users">134</div>
+    <div class="stat-label">Coleccionistas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">94</div>
+    <div class="stat-label">Países</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- ── VIEW: EXPLORAR ── -->
+  <div id="view-explorar">
+    <div class="section-title">Coleccionables <span>destacados</span></div>
+    <div class="section-sub">Filtrá por edición, categoría o condición</div>
+
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Buscar por nombre, país, año..." oninput="filterCards()">
+      <button class="btn-search" onclick="searchItems()">Buscar</button>
+    </div>
+
+    <div class="filters">
+      <span class="filter-label">Edición</span>
+      <button class="filter-chip active" onclick="filterYear('todos', this)">Todos</button>
+      <button class="filter-chip" onclick="filterYear('1970', this)">México '70</button>
+      <button class="filter-chip" onclick="filterYear('1986', this)">México '86</button>
+      <button class="filter-chip" onclick="filterYear('1998', this)">Francia '98</button>
+      <button class="filter-chip" onclick="filterYear('2014', this)">Brasil '14</button>
+      <button class="filter-chip" onclick="filterYear('2022', this)">Qatar '22</button>
+    </div>
+
+    <div class="filters">
+      <span class="filter-label">Categoría</span>
+      <button class="filter-chip active" onclick="filterCat('todas', this)">Todas</button>
+      <button class="filter-chip" onclick="filterCat('figurita', this)">Figuritas</button>
+      <button class="filter-chip" onclick="filterCat('camiseta', this)">Camisetas</button>
+      <button class="filter-chip" onclick="filterCat('moneda', this)">Monedas</button>
+      <button class="filter-chip" onclick="filterCat('programa', this)">Programas</button>
+      <button class="filter-chip" onclick="filterCat('pin', this)">Pins</button>
+    </div>
+
+    <div class="grid" id="cards-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="big">⚽</div>
+      <p>No se encontraron coleccionables con ese filtro.</p>
+    </div>
+  </div>
+
+  <!-- ── VIEW: PUBLICAR ── -->
+  <div id="view-publicar" style="display:none">
+    <div class="section-title">Publicar <span>coleccionable</span></div>
+    <div class="section-sub">Completá los datos de la pieza.</div>
+
+    <div class="panel open">
+      <h2>Datos de la Pieza</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label>Título de la pieza</label>
+          <input type="text" id="f-titulo" placeholder="Ej: Camiseta Maradona México 86">
+        </div>
+        <div class="field">
+          <label>Año del Mundial</label>
+          <select id="f-anio">
+            <option value="">– Seleccioná –</option>
+            <option>1930</option><option>1934</option><option>1938</option>
+            <option>1950</option><option>1954</option><option>1958</option>
+            <option>1962</option><option>1966</option><option>1970</option>
+            <option>1974</option><option>1978</option><option>1982</option>
+            <option>1986</option><option>1990</option><option>1994</option>
+            <option>1998</option><option>2002</option><option>2006</option>
+            <option>2010</option><option>2014</option><option>2018</option>
+            <option>2022</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>País sede</label>
+          <input type="text" id="f-sede" placeholder="Ej: México">
+        </div>
+        <div class="field">
+          <label>Categoría</label>
+          <select id="f-categoria">
+            <option value="">– Seleccioná –</option>
+            <option>Figurita</option>
+            <option>Camiseta</option>
+            <option>Moneda conmemorativa</option>
+            <option>Programa oficial</option>
+            <option>Pin / Badge</option>
+            <option>Poster</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Condición</label>
+          <select id="f-condicion">
+            <option value="">– Seleccioná –</option>
+            <option>Mint (sin uso)</option>
+            <option>Muy buena</option>
+            <option>Buena</option>
+            <option>Regular</option>
+            <option>Para restaurar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Precio (USD)</label>
+          <input type="number" id="f-precio" placeholder="0.00" min="0">
+        </div>
+        <div class="field">
+          <label>Tipo de oferta</label>
+          <select id="f-tipo">
+            <option>Venta</option>
+            <option>Intercambio</option>
+            <option>Subasta</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Descripción</label>
+          <textarea id="f-descripcion" placeholder="Describí la pieza: historia, detalles, autenticidad..."></textarea>
+        </div>
+        <div class="field">
+          <label>País de origen del vendedor</label>
+          <input type="text" id="f-pais" placeholder="Ej: Argentina">
+        </div>
+        <div class="field">
+          <label>Contacto (email o WhatsApp)</label>
+          <input type="text" id="f-contacto" placeholder="Ej: +54 362 ...">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="publicarItem()">Publicar pieza</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Detalle</h3>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+    </div>
+    <div id="modal-body"></div>
+    <div style="margin-top:1.2rem;display:flex;gap:0.8rem;flex-wrap:wrap">
+      <button class="btn-ghost" style="font-size:13px;padding:9px 20px" id="modal-contactar">Contactar vendedor</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">MundialMarket</div>
+  <p>E-commerce de Coleccionables</p>
+</footer>
+
+<script>
+const ANIO_MUNDIALES = ['1930','1934','1938','1950','1954','1958','1962','1966','1970','1974','1978','1982','1986','1990','1994','1998','2002','2006','2010','2014','2018','2022'];
+
+const ITEMS_INICIALES = [
+  { id:'MM-1986-CAM-001', titulo:'Camiseta Argentina Mundial México 86', anio:'1986', sede:'México', cat:'camiseta', cond:'Muy buena', precio:4200, tipo:'Venta', desc:'Réplica original de la camiseta de Argentina del Mundial 86. Tela original, con número 10. Conservada en estado impecable.', pais:'Argentina', contacto:'+54 362 4000000', emoji:'👕' },
+  { id:'MM-1970-FIG-001', titulo:'Álbum figuritas Panini México 70', anio:'1970', sede:'México', cat:'figurita', cond:'Buena', precio:890, tipo:'Venta', desc:'Álbum Panini completo del Mundial México 1970. Todas las figuritas pegadas. Tapa con desgaste natural de la época.', pais:'Brasil', contacto:'col70@email.com', emoji:'📖' },
+  { id:'MM-1998-MON-001', titulo:'Moneda conmemorativa Francia 98', anio:'1998', sede:'Francia', cat:'moneda', cond:'Mint (sin uso)', precio:150, tipo:'Venta', desc:'Moneda oficial de 10 francos emitida por la FIFA para el Mundial Francia 1998. Sin circular, en estuche original.', pais:'Francia', contacto:'+33 6 0000000', emoji:'🪙' },
+  { id:'MM-2014-PRO-001', titulo:'Programa oficial Brasil 2014 Final', anio:'2014', sede:'Brasil', cat:'programa', cond:'Muy buena', precio:320, tipo:'Intercambio', desc:'Programa oficial de la final Brasil 2014 (Alemania vs Argentina). En perfecto estado, con todas las páginas intactas.', pais:'Alemania', contacto:'sammler@email.de', emoji:'📋' },
+  { id:'MM-2022-PIN-001', titulo:'Pin oficial Qatar 2022 Colección', anio:'2022', sede:'Qatar', cat:'pin', cond:'Mint (sin uso)', precio:45, tipo:'Venta', desc:'Set de 5 pins oficiales del Mundial Qatar 2022. Incluye la Copa del Mundo, mascota La\'eeb y los 4 estadios principales.', pais:'Qatar', contacto:'+974 5000 0000', emoji:'📌' },
+  { id:'MM-1978-CAM-001', titulo:'Camiseta Selección Argentina 78', anio:'1978', sede:'Argentina', cat:'camiseta', cond:'Regular', precio:1800, tipo:'Subasta', desc:'Camiseta original de jugador de la selección argentina ganadora del Mundial 1978. Con desgaste propio de la época y uso en partido.', pais:'Argentina', contacto:'+54 11 4000 0000', emoji:'🏆' },
+];
+
+let items = [...ITEMS_INICIALES];
+let activeYear = 'todos';
+let activeCat = 'todas';
+let modalItem = null;
+let contadorId = { figurita: 7, camiseta: 3, moneda: 2, programa: 2, pin: 2, otro: 1 };
+
+const SIGLAS = { 'Figurita':'FIG', 'Camiseta':'CAM', 'Moneda conmemorativa':'MON', 'Programa oficial':'PRO', 'Pin / Badge':'PIN', 'Poster':'POS', 'Otro':'OTR' };
+
+function generarId(anio, cat) {
+  const sigla = SIGLAS[cat] || 'OTR';
+  const key = sigla.toLowerCase();
+  contadorId[key] = (contadorId[key] || 0) + 1;
+  return `MM-${anio}-${sigla}-${String(contadorId[key]).padStart(3,'0')}`;
+}
+
+function setView(view, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('view-explorar').style.display = view === 'explorar' ? '' : 'none';
+  document.getElementById('view-publicar').style.display = view === 'publicar' ? '' : 'none';
+  document.getElementById('hero-section').style.display = view === 'explorar' ? '' : 'none';
+  document.querySelector('.stats-bar').style.display = view === 'explorar' ? '' : 'none';
+}
+
+function filterYear(y, btn) {
+  activeYear = y;
+  document.querySelectorAll('.filters')[0].querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function filterCat(c, btn) {
+  activeCat = c;
+  document.querySelectorAll('.filters')[1].querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function filterCards() { renderCards(); }
+
+function searchItems() { renderCards(); }
+
+function renderCards() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = items.filter(it => {
+    if (activeYear !== 'todos' && it.anio !== activeYear) return false;
+    if (activeCat !== 'todas' && it.cat !== activeCat) return false;
+    if (q && !it.titulo.toLowerCase().includes(q) && !it.anio.includes(q) && !it.sede.toLowerCase().includes(q) && !it.pais.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const grid = document.getElementById('cards-grid');
+  const empty = document.getElementById('empty-state');
+  if (filtered.length === 0) { grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = filtered.map(it => `
+    <div class="card" onclick="openModal('${it.id}')">
+      <div class="card-img">${it.emoji || '⚽'}</div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-year">${it.anio}</span>
+          <span class="tag tag-cat">${it.cat}</span>
+          <span class="tag tag-cond">${it.cond.split(' ')[0]}</span>
+        </div>
+        <div class="card-title">${it.titulo}</div>
+        <div class="card-desc">${it.desc.substring(0,80)}…</div>
+        <div class="card-footer">
+          <span class="card-price">${it.tipo === 'Intercambio' ? 'Intercambio' : 'USD ' + it.precio.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(id) {
+  modalItem = items.find(it => it.id === id);
+  if (!modalItem) return;
+  document.getElementById('modal-title').textContent = modalItem.titulo;
+  document.getElementById('modal-body').innerHTML = `
+    <table class="record-table">
+      <tr><td>Año Mundial</td><td>${modalItem.anio} — ${modalItem.sede}</td></tr>
+      <tr><td>Categoría</td><td>${modalItem.cat}</td></tr>
+      <tr><td>Condición</td><td>${modalItem.cond}</td></tr>
+      <tr><td>Tipo de oferta</td><td>${modalItem.tipo}</td></tr>
+      <tr><td>Precio</td><td>${modalItem.tipo === 'Intercambio' ? 'Solo intercambio' : 'USD ' + modalItem.precio.toLocaleString()}</td></tr>
+      <tr><td>País vendedor</td><td>${modalItem.pais}</td></tr>
+      <tr><td>Descripción</td><td>${modalItem.desc}</td></tr>
+    </table>
+  `;
+  document.getElementById('modal-contactar').textContent = `Contactar (${modalItem.contacto})`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open');
+}
+
+function publicarItem() {
+  const titulo = document.getElementById('f-titulo').value.trim();
+  const anio = document.getElementById('f-anio').value;
+  const sede = document.getElementById('f-sede').value.trim();
+  const cat = document.getElementById('f-categoria').value;
+  const cond = document.getElementById('f-condicion').value;
+  const precio = parseFloat(document.getElementById('f-precio').value) || 0;
+  const tipo = document.getElementById('f-tipo').value;
+  const desc = document.getElementById('f-descripcion').value.trim();
+  const pais = document.getElementById('f-pais').value.trim();
+  const contacto = document.getElementById('f-contacto').value.trim();
+  if (!titulo || !anio || !cat || !cond) { alert('Completá al menos título, año, categoría y condición.'); return; }
+  const EMOJIS = { Figurita:'📖', Camiseta:'👕', 'Moneda conmemorativa':'🪙', 'Programa oficial':'📋', 'Pin / Badge':'📌', Poster:'🖼️', Otro:'📦' };
+  const id = generarId(anio, cat);
+  const nuevo = {
+    id, titulo, anio, sede: sede || '?', cat: cat.toLowerCase().split(' ')[0],
+    cond, precio, tipo, desc: desc || 'Sin descripción.',
+    pais: pais || 'Desconocido', contacto: contacto || 'No disponible',
+    emoji: EMOJIS[cat] || '⚽'
+  };
+  items.unshift(nuevo);
+  document.getElementById('stat-items').textContent = items.length;
+  alert(`✅ ¡Pieza publicada!`);
+  ['f-titulo','f-anio','f-sede','f-categoria','f-condicion','f-precio','f-tipo','f-descripcion','f-pais','f-contacto'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
+  });
+  setView('explorar', document.querySelector('.nav-btn'));
+}
+
+function initTicker() {
+  const years = ANIO_MUNDIALES.join(' · ');
+  const double = years + ' · ' + years;
+  document.getElementById('ticker-text').textContent = double + ' · ' + double;
+}
+
+function initHeroYear() {
+  let i = 0;
+  setInterval(() => {
+    document.getElementById('hero-year').textContent = ANIO_MUNDIALES[i % ANIO_MUNDIALES.length];
+    i++;
+  }, 2000);
+}
+
+initTicker();
+initHeroYear();
+renderCards();
+</script>
+</body>
+</html>
